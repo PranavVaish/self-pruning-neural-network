@@ -1,0 +1,42 @@
+# Self-Pruning Neural Network Configuration
+# All hyperparameters are centralized here for reproducibility and experimentation.
+
+model:
+  in_channels: 3
+  hidden_dims: [512, 256, 128]
+  num_classes: 10
+  dropout_rate: 0.2
+
+training:
+  epochs: 50
+  batch_size: 128
+  learning_rate: 0.002
+  weight_decay: 0.0001
+  optimizer: "adam"
+  scheduler: "cosine"
+  early_stopping_patience: 10
+  early_stopping_min_delta: 0.001   # min val_acc improvement to count as progress
+  grad_clip: 1.0
+  mixed_precision: true
+  num_workers: 2
+  pin_memory: true
+  seed: 42
+
+pruning:
+  # SparsityLoss uses MEAN normalization: SP = lambda * mean(gates) ~= lambda*0.5 at init
+  # lambda=0.5  ->  mild pruning   
+  # lambda=5    ->  medium pruning 
+  # lambda=50   ->  aggressive     
+  lambda_values: [0.5, 5, 50]
+  sparsity_threshold: 0.01
+
+checkpoint:
+  dir: "checkpoints"
+  save_best: true
+
+logging:
+  log_dir: "logs"
+  log_interval: 50
+
+visualization:
+  output_dir: "plots"
