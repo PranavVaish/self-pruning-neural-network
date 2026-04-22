@@ -2,7 +2,6 @@
 model/
 training/
 utils/
-outputs/
 tabular output/
 main.py
 
