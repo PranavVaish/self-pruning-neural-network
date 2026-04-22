@@ -3,27 +3,29 @@
 ## 1. Introduction
 
 Modern deep neural networks often contain millions of parameters, many
-of which are redundant after training. While overparameterization
-improves optimization, it increases:
+of which become redundant after training. While overparameterization
+improves optimization and generalization, it introduces several
+practical challenges:
 
--   Memory usage
--   Inference latency
--   Deployment cost
--   Energy consumption
+-   Increased memory consumption
+-   Higher inference latency
+-   Larger deployment costs
+-   Greater energy usage
 
 This project implements a self-pruning neural network that dynamically
 removes unnecessary weights during training using learnable gates and L1
 sparsity regularization.
 
-Unlike traditional pruning (post-training), this method performs online
-structural adaptation, producing compact and efficient models
-automatically.
+Unlike traditional pruning methods that operate after training, this
+approach performs online structural adaptation, enabling the model to
+automatically learn compact and efficient representations during
+optimization.
 
 ------------------------------------------------------------------------
 
 ## 2. Method Overview
 
-Each weight has an associated learnable gate:
+Each weight in the network is associated with a learnable gate:
 
 pruned_weight = weight × sigmoid(gate_score)
 
@@ -31,13 +33,20 @@ If:
 
 sigmoid(gate_score) ≈ 0
 
-the connection is effectively removed.
+the corresponding connection is effectively removed from the model.
+
+This mechanism allows the network to:
+
+-   Retain important connections
+-   Suppress redundant weights
+-   Learn sparse structures automatically
+-   Maintain predictive performance
 
 ------------------------------------------------------------------------
 
 ## 3. Why L1 Penalty Encourages Sparsity
 
-Total loss:
+The total training loss is defined as:
 
 L_total = L_classification + λ × L_sparsity
 
@@ -45,12 +54,17 @@ Where:
 
 L_sparsity = mean(sigmoid(g))
 
-Key behavior:
+Key mechanism:
 
--   L1 applies constant pressure toward zero
--   Redundant weights shrink
--   Important weights remain active
--   Produces sparse architectures
+-   L1 applies a consistent gradient pushing gate values toward zero
+-   Small or unimportant weights are gradually suppressed
+-   Important connections remain active due to classification gradients
+-   The model converges to a sparse architecture
+
+This interaction produces a bimodal distribution of gate values:
+
+-   A large spike near zero (pruned weights)
+-   A smaller cluster of active weights
 
 ------------------------------------------------------------------------
 
@@ -58,55 +72,46 @@ Key behavior:
 
 Dataset:
 
-CIFAR-10
+-   CIFAR-10 image classification dataset
+-   Automatically loaded using torchvision.datasets
 
-Architecture:
+Model Architecture:
 
 512 → 256 → 128 → 10
 
-Optimizer:
+Training Configuration:
 
-Adam
-
-Scheduler:
-
-Cosine Annealing
-
-Precision:
-
-Mixed Precision (AMP)
-
-Sparsity threshold:
-
-gate \< 0.01
+-   Optimizer: Adam
+-   Learning rate scheduler: Cosine Annealing
+-   Precision: Mixed Precision (AMP)
+-   Loss function: Cross-Entropy + L1 Sparsity Regularization
+-   Sparsity threshold: gate \< 0.01
 
 ------------------------------------------------------------------------
 
 ## 5. Results
 
-  Lambda   Test Accuracy   Sparsity (%)
-  -------- --------------- --------------
-  0.5      88.45%          84.9%
-  5        87.94%          95.3%
-  50       86.28%          99.5%
+| Lambda | Test Accuracy | Sparsity (%) |
+|--------|--------------|-------------|
+| 0.5    | 88.45%      | 84.9%       |
+| 5      | 87.94%      | 95.3%       |
+| 50     | 86.28%      | 99.5%       |
 
-------------------------------------------------------------------------
+---
 
 ## 6. Key Observations
 
-As λ increases:
+The experiments demonstrate a clear relationship between the sparsity
+coefficient (λ) and model behavior.
 
--   Sparsity increases
--   Accuracy decreases slightly
--   Model size reduces significantly
+1.  Sparsity increases with λ.
+2.  Accuracy remains stable under moderate sparsity.
+3.  Extreme sparsity eventually impacts performance.
+4.  Model compression is substantial with minimal accuracy loss.
 
 Accuracy drop from lowest to highest λ:
 
 ≈ 2.17%
-
-Maximum compression:
-
-≈ 192× reduction in effective model size
 
 ------------------------------------------------------------------------
 
@@ -116,11 +121,12 @@ Best trade-off:
 
 Lambda = 5
 
-Because:
+Justification:
 
--   Very high sparsity
--   Minimal accuracy loss
--   Stable training behavior
+-   Very high sparsity (95.3%)
+-   Minimal accuracy reduction
+-   Stable convergence behavior
+-   Efficient model compression
 
 ------------------------------------------------------------------------
 
@@ -128,10 +134,10 @@ Because:
 
 The self-pruning neural network successfully demonstrates:
 
--   Dynamic model compression
--   Minimal accuracy degradation
--   Stable optimization
--   Efficient inference
+-   Automatic model compression during training
+-   High sparsity levels without significant accuracy loss
+-   Stable optimization behavior
+-   Reduced computational and memory requirements
 
-The experiment confirms that learnable gates with L1 regularization
-enable automatic sparsity during training.
+This approach confirms that dynamic pruning is a practical strategy for
+building efficient neural networks suitable for real-world deployment.
