@@ -1,3 +1,11 @@
+# Ignore project modules and files(not needed for submission)
+model/
+training/
+utils/
+outputs/
+tabular output/
+main.py
+
 ############################################
 # Python Bytecode
 ############################################
