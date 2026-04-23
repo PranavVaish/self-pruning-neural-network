@@ -66,13 +66,13 @@ CIFAR-10
 
 ------------------------------------------------------------------------
 
-# Results
+## Results
 
-  Lambda   Test Accuracy   Sparsity (%)   Effective Model Size
-  -------- --------------- -------------- ----------------------
-  0.5      88.45%          84.9%          9.91 MB
-  5        87.94%          95.3%          3.09 MB
-  50       86.28%          99.5%          0.34 MB
+| Lambda | Test Accuracy | Sparsity (%) | Effective Model Size |
+|--------|--------------|--------------|----------------------|
+| 0.5    | 88.45%       | 84.9%        | 9.91 MB              |
+| 5      | 87.94%       | 95.3%        | 3.09 MB              |
+| 50     | 86.28%       | 99.5%        | 0.34 MB              |
 
 ------------------------------------------------------------------------
 
@@ -99,11 +99,7 @@ project/
 
 config/ config.yaml
 
-model/ prunable_linear.py network.py
-
-training/ trainer.py losses.py
-
-utils/ metrics.py logger.py seed.py
+outputs/plots
 
 .gitignore
 main.py\
@@ -133,7 +129,7 @@ pip install -r requirements.txt
 
 # Run Training
 
-python main.py
+python final_script.py
 
 ------------------------------------------------------------------------
 
