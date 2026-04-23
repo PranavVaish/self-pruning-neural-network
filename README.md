@@ -119,7 +119,7 @@ Activate environment:
 
 Windows:
 
-venv`\Scripts`{=tex}`\activate`{=tex}
+`venv\Scripts\activate`
 
 Install dependencies:
 
