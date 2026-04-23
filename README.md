@@ -101,10 +101,11 @@ config/ config.yaml
 
 outputs/plots
 
-.gitignore
-main.py\
+.gitignore\
+LICENSE\
 REPORT.md\
 README.md\
+final_script.py\
 requirements.txt
 
 ------------------------------------------------------------------------
