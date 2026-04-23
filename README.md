@@ -105,6 +105,7 @@ training/ trainer.py losses.py
 
 utils/ metrics.py logger.py seed.py
 
+.gitignore
 main.py\
 REPORT.md\
 README.md\
@@ -239,11 +240,9 @@ Torchvision
 
 # Author
 
-**Pranav Vaish**  
-Machine Learning / AI Engineering Project  
+**Pranav Vaish**    
 
-LinkedIn:  
-https://www.linkedin.com/in/pranavvaish20
+LinkedIn: <https://www.linkedin.com/in/pranavvaish20>
 
 ------------------------------------------------------------------------
 
